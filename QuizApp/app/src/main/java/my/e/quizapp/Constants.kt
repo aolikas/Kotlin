@@ -3,6 +3,10 @@ package my.e.quizapp
 import java.util.ArrayList
 
 object Constants {
+    const val USER_NAME: String = "user_name"
+    const val TOTAL_QUESTION: String = "total_question"
+    const val CORRECT_ANSWER: String = "correct_answer"
+
     fun getQuestions(): ArrayList<Question> {
         val questionList = ArrayList<Question>()
         val que1 = Question(
@@ -69,7 +73,7 @@ object Constants {
             R.drawable.ic_flag_of_denmark,
             "Denmark", "Finland",
             "Norway", "Belgium",
-            2
+            1
         )
 
         questionList.add(que7)
@@ -93,17 +97,6 @@ object Constants {
         )
 
         questionList.add(que9)
-
-        val que10 = Question(
-            1, "What country does this flag belong to?",
-            R.drawable.ic_flag_of_india,
-            "China", "Bhutan",
-            "India", "Iran",
-            3
-        )
-
-        questionList.add(que10)
-
 
         return questionList
     }

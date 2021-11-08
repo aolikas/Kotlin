@@ -6,5 +6,11 @@
     <string name="main_et_name_hint">Name</string>
     <string name="main_btn_start">Start</string>
     <string name="question_image_description">Image of countries flag</string>
-    <string name="question_progress_result">0/9</string>
+    <string name="question_progress_result">0/10</string>
+    <string name="question_option">Indonesia</string>
+    <string name="question_btn_submit">Submit</string>
+    <string name="final_result">RESULT</string>
+    <string name="final_congratulation">CONGRATULATION</string>
+    <string name="final_name">Name</string>
+    <string name="final_score">score</string>
 </resources>
