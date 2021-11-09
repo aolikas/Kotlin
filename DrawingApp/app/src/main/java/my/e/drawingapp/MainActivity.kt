@@ -1,19 +1,67 @@
 package my.e.drawingapp
 
+import android.Manifest
+import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import kotlinx.android.synthetic.main.dialog_brush_size.*
 
 class MainActivity : AppCompatActivity() {
     private var drawingView: DrawingView? = null
-    private var mImageButtonCurrentPaint: ImageButton? =  null
+    private var mImageButtonCurrentPaint: ImageButton? = null
+
+    val openGalleryLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+            if(result.resultCode == RESULT_OK && result.data != null) {
+                val imageBackground: ImageView = findViewById(R.id.iv_background)
+                imageBackground.setImageURI(result.data?.data)
+            }
+        }
+    val requestPermission: ActivityResultLauncher<Array<String>>
+    = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+           permissions ->
+        permissions.entries.forEach {
+            val permissionName = it.key
+            val isGranted = it.value
+
+            if(isGranted) {
+                Toast.makeText(this,
+                "Permission is granted",
+                Toast.LENGTH_SHORT)
+                    .show()
+                val pickIntent = Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                openGalleryLauncher.launch(pickIntent)
+
+
+
+            } else {
+                if(permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                    Toast.makeText(this,
+                        "Permission for Storage is denied",
+                        Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,40 +69,65 @@ class MainActivity : AppCompatActivity() {
 
         drawingView = findViewById(R.id.drawing_view)
         drawingView?.setSizeForBrush(20.toFloat())
-        val linearLayoutPaintColors = findViewById<LinearLayout>(R.id.layout)
+        val linearLayoutPaintColors = findViewById<LinearLayout>(R.id.pallet_layout)
 
         mImageButtonCurrentPaint = linearLayoutPaintColors[2] as ImageButton
         mImageButtonCurrentPaint!!.setImageDrawable(
-            ContextCompat.getDrawable(this,
-            R.drawable.pallet_pressed))
-
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.pallet_pressed
+            )
+        )
 
 
         val btnBrush: ImageButton = findViewById(R.id.iv_brush_button)
-        btnBrush.setOnClickListener{
+        btnBrush.setOnClickListener {
             showBrushSizeDialog()
+        }
+
+        val btnImage: ImageButton = findViewById(R.id.iv_image_button)
+        btnImage.setOnClickListener {
+            requestStoragePermission()
+        }
+
+        val btnUndo: ImageButton = findViewById(R.id.iv_undo_button)
+        btnUndo.setOnClickListener {
+            drawingView?.onClickUndo()
+        }
+    }
+
+    private fun requestStoragePermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            showRationalDialog("Drawing App",
+                "This App needs to Access your External Storage")
+        } else {
+            requestPermission.launch(arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ))
         }
     }
 
     private fun showBrushSizeDialog() {
-        var brushDialog = Dialog(this)
+        val brushDialog = Dialog(this)
         brushDialog.setContentView(R.layout.dialog_brush_size)
         brushDialog.setTitle("Brush Size")
 
         val btnSmall = brushDialog.iv_small_brush
-        btnSmall.setOnClickListener{
+        btnSmall.setOnClickListener {
             drawingView?.setSizeForBrush(10.toFloat())
             brushDialog.dismiss()
         }
 
         val btnMedium = brushDialog.iv_medium_brush
-        btnMedium.setOnClickListener{
+        btnMedium.setOnClickListener {
             drawingView?.setSizeForBrush(20.toFloat())
             brushDialog.dismiss()
         }
 
         val btnLarge = brushDialog.iv_large_brush
-        btnLarge.setOnClickListener{
+        btnLarge.setOnClickListener {
             drawingView?.setSizeForBrush(30.toFloat())
             brushDialog.dismiss()
         }
@@ -64,16 +137,44 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun paintClicked(view: View) {
-    if(view!== mImageButtonCurrentPaint) {
-        val imageButton = view as ImageButton
-        val colorTag = imageButton.tag.toString()
-        drawingView?.setColor(colorTag)
-       imageButton.setImageDrawable(
-            ContextCompat.getDrawable(this, R.drawable.pallet_pressed))
-        mImageButtonCurrentPaint?.setImageDrawable(
-            ContextCompat.getDrawable(this, R.drawable.pallet_normal))
+        if (view !== mImageButtonCurrentPaint) {
+            val imageButton = view as ImageButton
+            val colorTag = imageButton.tag.toString()
+            drawingView?.setColor(colorTag)
+            imageButton.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.pallet_pressed)
+            )
+            mImageButtonCurrentPaint?.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.pallet_normal)
+            )
 
-        mImageButtonCurrentPaint = view
+            mImageButtonCurrentPaint = view
+        }
     }
+
+    private fun showRationalDialog(title: String, msg: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+            .setMessage(msg)
+            .setPositiveButton("Cancel") { dialog, _->
+                dialog.dismiss()
+            }
+        builder.create().show()
+    }
+
+    private fun getBitmapFromView(view: View): Bitmap {
+        val returnedBitmap = Bitmap.createBitmap(view.width,
+            view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if(bgDrawable != null) {
+            bgDrawable.draw(canvas)
+        } else {
+            canvas.drawColor(Color.WHITE)
+        }
+
+        view.draw(canvas)
+
+        return  returnedBitmap
     }
 }

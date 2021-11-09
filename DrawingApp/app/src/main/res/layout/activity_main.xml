@@ -6,114 +6,173 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <my.e.drawingapp.DrawingView
-        android:id="@+id/drawing_view"
+    <FrameLayout
+        android:id="@+id/frame_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="5dp"
+        android:padding="1dp"
         android:background="@drawable/background_drawing_view_layout"
-        app:layout_constraintBottom_toTopOf="@id/layout"
+        app:layout_constraintBottom_toTopOf="@id/pallet_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/basica"/>
+
+        <my.e.drawingapp.DrawingView
+            android:id="@+id/drawing_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80FFFFFF"/>
+
+
+    </FrameLayout>
 
 
     <LinearLayout
-        android:id="@+id/layout"
+        android:id="@+id/pallet_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/iv_brush_button"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drawing_view">
+        app:layout_constraintTop_toBottomOf="@+id/frame_container">
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/skin"
             android:background="@color/skin"
             android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/skin"
             tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/black"
             android:background="@color/black"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/black"
+            tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/red"
             android:background="@color/red"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/red"
+            tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/green"
             android:background="@color/green"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/green"
+            tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/blue"
             android:background="@color/blue"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/blue"
+            tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/yellow"
             android:background="@color/yellow"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/yellow"
+            tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/lollipop"
             android:background="@color/lollipop"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/lollipop"
+            tools:ignore="UsingOnClickInXml" />
+
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="5dp"
-            android:src="@drawable/pallet_normal"
-            android:tag="@color/random"
             android:background="@color/random"
             android:onClick="paintClicked"
-            tools:ignore="UsingOnClickInXml"/>
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/random"
+            tools:ignore="UsingOnClickInXml" />
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/iv_brush_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="5dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_brush"
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/pallet_layout">
+
+        <ImageButton
+            android:id="@+id/iv_image_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_image"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/iv_undo_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_undo"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/iv_brush_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_brush"
+            tools:ignore="SpeakableTextPresentCheck"/>
+
+        <ImageButton
+            android:id="@+id/iv_save_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_save"
+            tools:ignore="SpeakableTextPresentCheck"/>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

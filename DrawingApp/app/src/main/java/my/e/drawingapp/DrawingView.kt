@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.view.marginStart
 
 class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mDrawPath: CustomPath? = null
@@ -17,6 +16,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var color = Color.BLACK
     private var canvas: Canvas? = null
     private val mPaths = ArrayList<CustomPath>()
+    private val mUndoPaths = ArrayList<CustomPath>()
 
 
     init {
@@ -32,6 +32,13 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         mDrawPaint!!.strokeCap = Paint.Cap.ROUND
         mCanvasPaint = Paint(Paint.DITHER_FLAG)
 
+    }
+
+    fun onClickUndo() {
+        if(mPaths.size > 0) {
+            mUndoPaths.add(mPaths.removeAt(mPaths.size - 1))
+            invalidate()
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -94,8 +101,10 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     fun setSizeForBrush(newSize: Float) {
-        mBrushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-        newSize, resources.displayMetrics)
+        mBrushSize = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            newSize, resources.displayMetrics
+        )
         mDrawPaint!!.strokeWidth = mBrushSize
     }
 
@@ -107,8 +116,5 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     internal inner class CustomPath(
         var color: Int,
         var brushThickness: Float
-    ) : Path() {
-
-    }
-
+    ) : Path()
 }
