@@ -4,23 +4,29 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.media.MediaScannerConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.dialog_brush_size.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
     private var drawingView: DrawingView? = null
@@ -94,6 +100,16 @@ class MainActivity : AppCompatActivity() {
         btnUndo.setOnClickListener {
             drawingView?.onClickUndo()
         }
+
+        val btnSaveImage: ImageButton = findViewById(R.id.iv_save_button)
+        btnSaveImage.setOnClickListener {
+            if(isReadStorageAllowed()){
+                lifecycleScope.launch{
+                    val drawingView: FrameLayout = findViewById(R.id.frame_container)
+                    saveBitmapFile(getBitmapFromView(drawingView))
+                }
+            }
+        }
     }
 
     private fun requestStoragePermission() {
@@ -104,9 +120,17 @@ class MainActivity : AppCompatActivity() {
                 "This App needs to Access your External Storage")
         } else {
             requestPermission.launch(arrayOf(
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
         }
+    }
+
+    private fun isReadStorageAllowed(): Boolean {
+        val result = ContextCompat.checkSelfPermission(this,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
+
+        return result == PackageManager.PERMISSION_GRANTED
     }
 
     private fun showBrushSizeDialog() {
@@ -176,5 +200,53 @@ class MainActivity : AppCompatActivity() {
         view.draw(canvas)
 
         return  returnedBitmap
+    }
+
+    private suspend fun saveBitmapFile(mBitmap: Bitmap?): String {
+        var result = ""
+        withContext(Dispatchers.IO) {
+            if(mBitmap != null) {
+                try{
+                    var bytes = ByteArrayOutputStream()
+                    mBitmap.compress(Bitmap.CompressFormat.PNG,
+                    90,bytes)
+
+                    val file = File(externalCacheDir?.absoluteFile.toString() +
+                    File.separator + "DrawingApp_" + System.currentTimeMillis() / 1000 + ".png")
+
+                    val fileOutput = FileOutputStream(file)
+                    fileOutput.write(bytes.toByteArray())
+                    fileOutput.close()
+
+                    result = file.absolutePath
+                    runOnUiThread() {
+                        if(result.isNotEmpty()) {
+                            Toast.makeText(applicationContext,"File saved successfully " + result,
+                            Toast.LENGTH_SHORT).show()
+                            sharedImage(result)
+                        } else {
+                            Toast.makeText(applicationContext,"Wrong",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    result = ""
+                    e.printStackTrace()
+                }
+            }
+        }
+        return result
+    }
+
+    private fun sharedImage(result: String) {
+        MediaScannerConnection.scanFile(this,
+        arrayOf(result), null) {
+            path, uri ->
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            shareIntent.type = "image/png"
+            startActivity(Intent.createChooser(shareIntent, "Share"))
+        }
     }
 }
