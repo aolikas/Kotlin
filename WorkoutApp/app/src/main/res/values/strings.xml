@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WorkoutApp</string>
+    <string name="main_activity_image_description">main_activity_image_title</string>
+    <string name="tv_start">START</string>
+    <string name="exercise_activity_title">Get Ready For</string>
+    <string name="exercise_activity_timer">10</string>
+</resources>
