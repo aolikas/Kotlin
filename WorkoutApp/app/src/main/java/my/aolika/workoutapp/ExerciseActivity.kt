@@ -3,6 +3,7 @@ package my.aolika.workoutapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.View
 import android.widget.Toast
 import my.aolika.workoutapp.databinding.ActivityExerciseBinding
 
@@ -11,7 +12,11 @@ class ExerciseActivity : AppCompatActivity() {
 
     private var binding: ActivityExerciseBinding? = null
     private var restTimer: CountDownTimer? = null
-    private var restProgress = 0;
+    private var restProgress = 0
+
+    private var exerciseTimer: CountDownTimer? = null
+    private var exerciseProgress = 0
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +38,7 @@ class ExerciseActivity : AppCompatActivity() {
 
     }
 
-    private fun setPestProgressBar() {
+    private fun setRestProgressBar() {
         binding?.progressBar?.progress = restProgress
 
         restTimer = object: CountDownTimer(10000, 1000) {
@@ -47,6 +52,26 @@ class ExerciseActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,
                 "Start",
                 Toast.LENGTH_SHORT).show()
+                setupExerciseView()
+            }
+
+        }.start()
+    }
+
+    private fun setExerciseProgressBar() {
+        binding?.progressBarExercise?.progress = exerciseProgress
+
+        exerciseTimer = object: CountDownTimer(30000, 1000) {
+            override fun onTick(p0: Long) {
+                exerciseProgress++
+                binding?.progressBarExercise?.progress = 30 - exerciseProgress
+                binding?.tvTimerExercise?.text = (30 - exerciseProgress).toString()
+            }
+
+            override fun onFinish() {
+                Toast.makeText(applicationContext,
+                    "30 seconds are over, let's rest",
+                    Toast.LENGTH_SHORT).show()
             }
 
         }.start()
@@ -58,14 +83,35 @@ class ExerciseActivity : AppCompatActivity() {
             restProgress = 0
         }
 
-        setPestProgressBar()
+        setRestProgressBar()
     }
+
+    private fun setupExerciseView() {
+        binding?.flProgressBar?.visibility = View.INVISIBLE
+        binding?.tvTitle?.text = "Exercise"
+        binding?.flExerciseView?.visibility = View.VISIBLE
+
+        if(exerciseTimer!= null) {
+            exerciseTimer?.cancel()
+            exerciseProgress = 0
+        }
+
+        setExerciseProgressBar()
+    }
+
+
+
 
     override fun onDestroy() {
         super.onDestroy()
         if(restTimer != null) {
             restTimer?.cancel()
             restProgress = 0
+        }
+
+        if(exerciseTimer!= null) {
+            exerciseTimer?.cancel()
+            exerciseProgress = 0
         }
 
         binding = null
