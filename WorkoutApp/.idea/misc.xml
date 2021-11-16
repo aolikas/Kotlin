@@ -8,7 +8,7 @@
         <entry key="app/src/main/res/drawable/btn_border.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/btn_border_pressed.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/cicrular_color_accent_background.xml" value="0.371875" />
-        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
       </map>
     </option>
