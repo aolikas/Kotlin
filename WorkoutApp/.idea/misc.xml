@@ -3,13 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/circular_color_gray_background.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable-v24/circular_progress_bar.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable-v24/circular_progress_gray.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/btn_border.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/btn_border_pressed.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/cicrular_color_accent_background.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/circular_color_selected_background.xml" value="0.371875" />
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/item_exercise_status.xml" value="0.17299898682877407" />
       </map>
     </option>
   </component>
