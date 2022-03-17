@@ -4,17 +4,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.Toast
+import my.aolika.a7minutesworkout.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val flStartButton : FrameLayout = findViewById(R.id.flStart)
-        flStartButton.setOnClickListener {
+        binding.flStart.setOnClickListener{
             Toast.makeText(this,
-            "Clicked!",
-            Toast.LENGTH_SHORT).show()
+                "Clicked!",
+                Toast.LENGTH_SHORT).show()
         }
+
     }
+    
 }
