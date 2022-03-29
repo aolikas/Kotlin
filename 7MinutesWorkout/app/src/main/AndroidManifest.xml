@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.7MinutesWorkout">
         <activity
-            android:name=".MainActivity"
+            android:name=".exerciseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

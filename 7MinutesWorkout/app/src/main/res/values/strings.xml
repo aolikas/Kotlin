@@ -2,4 +2,6 @@
     <string name="app_name">7MinutesWorkout</string>
     <string name="main_text_start">START</string>
     <string name="main_image_description">logo</string>
+    <string name="title_exercise">Get Ready</string>
+    <string name="timer">10</string>
 </resources>
