@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ArtBook</string>
+    <string name="fragment_art_description">Adding a new item</string>
+    <string name="art_row_title">Art Name</string>
+    <string name="art_row_artist">Artist name</string>
+    <string name="art_row_year">Year</string>
+    <string name="art_image_detail">Painting</string>
+    <string name="art_et_name">Enter Name</string>
+    <string name="art_et_artist">Enter Artist</string>
+    <string name="art_et_year">Enter Year</string>
+    <string name="art_btn_save">Save</string>
+    <string name="art_et_search">Start your search here</string>
+</resources>
