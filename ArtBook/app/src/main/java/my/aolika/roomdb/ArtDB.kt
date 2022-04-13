@@ -7,5 +7,5 @@ import androidx.room.RoomDatabase
 abstract class ArtDB : RoomDatabase() {
     abstract fun artDao() : ArtDao
 
-    
+
 }
