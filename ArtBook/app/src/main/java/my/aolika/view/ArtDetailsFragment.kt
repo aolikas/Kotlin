@@ -9,9 +9,8 @@ import my.aolika.artbook.R
 import my.aolika.artbook.databinding.FragmentArtDetailsBinding
 
 
-
 class ArtDetailsFragment : Fragment(R.layout.fragment_art_details) {
-    private var fragmentBinding : FragmentArtDetailsBinding? = null
+    private var fragmentBinding: FragmentArtDetailsBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -24,7 +23,7 @@ class ArtDetailsFragment : Fragment(R.layout.fragment_art_details) {
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                     findNavController().popBackStack()
+                findNavController().popBackStack()
             }
         }
 

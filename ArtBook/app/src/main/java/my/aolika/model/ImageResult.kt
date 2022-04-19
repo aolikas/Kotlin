@@ -25,5 +25,4 @@ data class ImageResult(
     val webformatHeight: Int,
     val webformatURL: String,
     val webformatWidth: Int
-
 )

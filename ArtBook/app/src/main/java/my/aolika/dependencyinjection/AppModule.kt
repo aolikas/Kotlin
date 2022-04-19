@@ -2,7 +2,6 @@ package my.aolika.dependencyinjection
 
 
 import android.content.Context
-import androidx.room.Database
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
@@ -17,13 +16,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent ::class)
+@InstallIn(ActivityComponent::class)
 object AppModule {
     @Singleton
     @Provides
-    fun injectRoomDB(@ApplicationContext context: Context)
-    = Room.databaseBuilder(context,
-    ArtDB::class.java, "ArtBookDB").build()
+    fun injectRoomDB(@ApplicationContext context: Context) = Room.databaseBuilder(
+        context,
+        ArtDB::class.java, "ArtBookDB"
+    ).build()
 
     @Singleton
     @Provides
@@ -31,12 +31,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun injectRetrofitAPI() : RetrofitApi {
+    fun injectRetrofitAPI(): RetrofitApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
             .create(RetrofitApi::class.java)
     }
-
 }
