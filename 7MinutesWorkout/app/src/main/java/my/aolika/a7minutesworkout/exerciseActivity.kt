@@ -6,6 +6,8 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import my.aolika.a7minutesworkout.databinding.ActivityExerciseBinding
+import my.aolika.a7minutesworkout.model.Constants
+import my.aolika.a7minutesworkout.model.ExerciseModel
 
 class exerciseActivity : AppCompatActivity() {
 
@@ -17,7 +19,8 @@ class exerciseActivity : AppCompatActivity() {
     private var exerciseTimer: CountDownTimer? = null
     private var exerciseProgress = 0
 
-
+    private var exerciseList: ArrayList<ExerciseModel>? = null
+    private var currentExercisePosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,8 @@ class exerciseActivity : AppCompatActivity() {
         if (supportActionBar != null) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
+        exerciseList = Constants.defaultExerciseList()
+
         binding.toolbarExercise.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -47,11 +52,13 @@ class exerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                Toast.makeText(
-                    this@exerciseActivity,
-                    "30 seconds are over",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if(currentExercisePosition < exerciseList?.size!! - 1) {
+                    setupRestView()
+                } else{
+                    Toast.makeText(this@exerciseActivity,
+                    "Done",
+                    Toast.LENGTH_SHORT).show()
+                }
             }
 
         }.start()
@@ -64,11 +71,12 @@ class exerciseActivity : AppCompatActivity() {
             override fun onTick(p0: Long) {
                 restProgress++
                 binding.progressBar.progress = 10 - restProgress
-                binding.timer.text = (10 - restProgress).toString()
+                binding.tvTimer.text = (10 - restProgress).toString()
 
             }
 
             override fun onFinish() {
+                currentExercisePosition++
                 setupExerciseView()
             }
 
@@ -76,6 +84,12 @@ class exerciseActivity : AppCompatActivity() {
     }
 
     private fun setupRestView() {
+        binding.flRestView.visibility = View.VISIBLE
+        binding.tvTitle.visibility = View.VISIBLE
+        binding.tvExercise.visibility = View.INVISIBLE
+        binding.flExerciseView.visibility = View.INVISIBLE
+        binding.ivExercise.visibility = View.INVISIBLE
+
         if(restTimer != null) {
             restTimer?.cancel()
             restProgress = 0
@@ -85,14 +99,22 @@ class exerciseActivity : AppCompatActivity() {
     }
 
     private fun setupExerciseView() {
-        binding.progressBarExercise.visibility = View.INVISIBLE
-        binding.title.text = "Exercise Name"
+        binding.flRestView.visibility = View.INVISIBLE
+        binding.tvTitle.visibility = View.INVISIBLE
+        binding.tvExercise.visibility = View.VISIBLE
         binding.flExerciseView.visibility = View.VISIBLE
+        binding.ivExercise.visibility = View.VISIBLE
+
 
         if(exerciseTimer!= null) {
             exerciseTimer?.cancel()
             exerciseProgress = 0
         }
+
+        binding.ivExercise
+            .setImageResource(exerciseList!![currentExercisePosition].getImage())
+        binding.tvExercise.text = exerciseList!![currentExercisePosition].getName()
+
 
         setExerciseProgressBar()
     }
