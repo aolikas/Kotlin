@@ -1,5 +1,6 @@
 package my.aolika.a7minutesworkout
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -37,18 +38,22 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var exerciseAdapter: ExerciseRecyclerAdapter? = null
 
+    private var restTimerDuration: Long = 1
+    private var exerciseTimerDuration: Long = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExerciseBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setSupportActionBar(binding.toolbarExercise)
         if (supportActionBar != null) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         exerciseList = Constants.defaultExerciseList()
 
-        tts  = TextToSpeech(this, this)
+        tts = TextToSpeech(this, this)
 
         binding.toolbarExercise.setNavigationOnClickListener {
             onBackPressed()
@@ -70,7 +75,7 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setExerciseProgressBar() {
         binding.progressBarExercise.progress = exerciseProgress
 
-        exerciseTimer = object : CountDownTimer(30000, 1000) {
+        exerciseTimer = object : CountDownTimer(exerciseTimerDuration * 1000, 1000) {
             override fun onTick(p0: Long) {
                 exerciseProgress++
                 binding.progressBarExercise.progress = 30 - exerciseProgress
@@ -79,12 +84,16 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
-                if(currentExercisePosition < exerciseList?.size!! - 1) {
+                if (currentExercisePosition < exerciseList?.size!! - 1) {
+                    exerciseList!![currentExercisePosition].setIsSelected(false)
+                    exerciseList!![currentExercisePosition].setIsCompleted(true)
+                    exerciseAdapter!!.notifyDataSetChanged()
                     setupRestView()
-                } else{
-                    Toast.makeText(this@exerciseActivity,
-                    "Done",
-                    Toast.LENGTH_SHORT).show()
+                } else {
+                   finish()
+                    val intent = Intent(this@exerciseActivity,
+                        FinishActivity:: class.java)
+                    startActivity(intent)
                 }
             }
 
@@ -93,9 +102,11 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setRestProgressBar() {
 
-        try{
-            val soundURI = Uri.parse("android.resource://my.aolika.a7minutesworkout/" +
-            R.raw.press_start)
+        try {
+            val soundURI = Uri.parse(
+                "android.resource://my.aolika.a7minutesworkout/" +
+                        R.raw.press_start
+            )
             player = MediaPlayer.create(applicationContext, soundURI)
             player?.isLooping = false
             player?.start()
@@ -104,7 +115,7 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
         binding.progressBar.progress = restProgress
 
-        restTimer = object : CountDownTimer(10000, 1000) {
+        restTimer = object : CountDownTimer(restTimerDuration * 1000, 1000) {
             override fun onTick(p0: Long) {
                 restProgress++
                 binding.progressBar.progress = 10 - restProgress
@@ -114,6 +125,8 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 currentExercisePosition++
+                exerciseList!![currentExercisePosition].setIsSelected(true)
+                exerciseAdapter!!.notifyDataSetChanged()
                 setupExerciseView()
             }
 
@@ -131,7 +144,7 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
 
 
-        if(restTimer != null) {
+        if (restTimer != null) {
             restTimer?.cancel()
             restProgress = 0
         }
@@ -153,7 +166,7 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding.ivExercise.visibility = View.VISIBLE
 
 
-        if(exerciseTimer!= null) {
+        if (exerciseTimer != null) {
             exerciseTimer?.cancel()
             exerciseProgress = 0
         }
@@ -170,22 +183,22 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(restTimer != null) {
+        if (restTimer != null) {
             restTimer?.cancel()
             restProgress = 0
         }
 
-        if(exerciseTimer != null) {
+        if (exerciseTimer != null) {
             exerciseTimer?.cancel()
             exerciseProgress = 0
         }
 
-        if(tts != null) {
+        if (tts != null) {
             tts!!.stop()
             tts!!.shutdown()
         }
 
-        if(player!= null) {
+        if (player != null) {
             player!!.stop()
         }
 
@@ -193,18 +206,23 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     override fun onInit(status: Int) {
-        if(status == TextToSpeech.SUCCESS) {
+        if (status == TextToSpeech.SUCCESS) {
             val result = tts!!.setLanguage(Locale.US)
 
-            if(result == TextToSpeech.LANG_MISSING_DATA ||
-                    result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Toast.makeText(this@exerciseActivity,
-                "This language is not supported",
-                Toast.LENGTH_SHORT).show()
+            if (result == TextToSpeech.LANG_MISSING_DATA ||
+                result == TextToSpeech.LANG_NOT_SUPPORTED
+            ) {
+                Toast.makeText(
+                    this@exerciseActivity,
+                    "This language is not supported",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-                Toast.makeText(this@exerciseActivity,
+                Toast.makeText(
+                    this@exerciseActivity,
                     "Initialization failed",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
