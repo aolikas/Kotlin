@@ -59,7 +59,6 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         binding.toolbarExercise.setNavigationOnClickListener {
             customDialogForBackButton()
-            onBackPressed()
         }
 
         setupRestView()

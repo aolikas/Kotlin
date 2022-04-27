@@ -2,30 +2,27 @@ package my.aolika.a7minutesworkout
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import my.aolika.a7minutesworkout.databinding.ActivityFinishBinding
+import my.aolika.a7minutesworkout.databinding.ActivityBmiactivityBinding
 
-class FinishActivity : AppCompatActivity() {
+class BMIActivity : AppCompatActivity() {
 
-    private var binding: ActivityFinishBinding? = null
-
+    private var binding : ActivityBmiactivityBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFinishBinding.inflate(layoutInflater)
+        binding = ActivityBmiactivityBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+        setSupportActionBar(binding?.bmiToolbar)
 
-        setSupportActionBar(binding?.finishToolbar)
         if (supportActionBar != null) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.title = "Calculate BMI"
         }
 
-        binding?.finishToolbar?.setNavigationOnClickListener {
+        binding?.bmiToolbar?.setNavigationOnClickListener {
             onBackPressed()
         }
-
-        binding?.btnFinish?.setOnClickListener {
-            finish()
-        }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
