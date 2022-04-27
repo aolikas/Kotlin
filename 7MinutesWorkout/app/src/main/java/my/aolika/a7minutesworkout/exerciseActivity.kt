@@ -1,5 +1,6 @@
 package my.aolika.a7minutesworkout
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import my.aolika.a7minutesworkout.adapter.ExerciseRecyclerAdapter
 import my.aolika.a7minutesworkout.databinding.ActivityExerciseBinding
+import my.aolika.a7minutesworkout.databinding.DialogBackConformationBinding
 import my.aolika.a7minutesworkout.model.Constants
 import my.aolika.a7minutesworkout.model.ExerciseModel
 import java.lang.Exception
@@ -56,12 +58,35 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts = TextToSpeech(this, this)
 
         binding.toolbarExercise.setNavigationOnClickListener {
+            customDialogForBackButton()
             onBackPressed()
         }
 
         setupRestView()
         setUpExerciseRecyclerAdapter()
 
+    }
+
+    override fun onBackPressed() {
+        customDialogForBackButton()
+    }
+
+
+    private fun customDialogForBackButton() {
+        val customDialog = Dialog(this)
+        val dialogBinding = DialogBackConformationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding.root)
+        customDialog.setCanceledOnTouchOutside(false)
+        dialogBinding.btnYes.setOnClickListener {
+            this@exerciseActivity.finish()
+            customDialog.dismiss()
+        }
+
+        dialogBinding.btnNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+
+        customDialog.show()
     }
 
     private fun setUpExerciseRecyclerAdapter() {
@@ -90,9 +115,11 @@ class exerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     exerciseAdapter!!.notifyDataSetChanged()
                     setupRestView()
                 } else {
-                   finish()
-                    val intent = Intent(this@exerciseActivity,
-                        FinishActivity:: class.java)
+                    finish()
+                    val intent = Intent(
+                        this@exerciseActivity,
+                        FinishActivity::class.java
+                    )
                     startActivity(intent)
                 }
             }

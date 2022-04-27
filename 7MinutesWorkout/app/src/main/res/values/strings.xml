@@ -12,4 +12,8 @@
     <string name="finish_description">end</string>
     <string name="tv_title1">You have done the workout!</string>
     <string name="btn_finish">Finish</string>
+    <string name="dialog_title">Are you sure?</string>
+    <string name="dialog_content">This will stop your workout. You\'ve come this far, are you sure you want to quit?</string>
+    <string name="dialog_btn_yes">YES</string>
+    <string name="dialog_btn_no">No</string>
 </resources>
