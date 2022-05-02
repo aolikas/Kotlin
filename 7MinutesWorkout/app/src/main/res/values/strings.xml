@@ -25,4 +25,6 @@
     <string name="bmi_tv_type">Normal</string>
     <string name="bmi_tv_description">Description</string>
     <string name="bmi_btn_calculate">Calculate</string>
+    <string name="bmi_metrics_units">METRIC UNITS</string>
+    <string name="bmi_us_units">US UNITS</string>
 </resources>

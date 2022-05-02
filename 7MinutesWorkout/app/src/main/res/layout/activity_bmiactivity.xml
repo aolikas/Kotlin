@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,51 +11,72 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="#FFFFFF" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_metric_unit_weight"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    <RadioGroup
+        android:id="@+id/rg_units"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bmi_toolbar"
-        android:layout_margin="10dp"
-        app:boxStrokeColor="@color/purple_700"
-        app:hintTextColor="@color/purple_700">
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radio_group_tab_background"
+        android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_metric_unit_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/bmi_et_hint_weight"
-            android:inputType="numberDecimal"
-            android:textSize="16sp" />
+        <RadioButton
+            android:id="@+id/rb_units"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="0.50"
+            android:background="@drawable/units_tab_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/bmi_metrics_units"
+            android:textColor="@drawable/units_tab_color_selector"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <RadioButton
+            android:id="@+id/rb_us_units"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="0.50"
+            android:background="@drawable/units_tab_selector"
+            android:button="@null"
+            android:checked="false"
+            android:gravity="center"
+            android:text="@string/bmi_us_units"
+            android:textColor="@drawable/units_tab_color_selector"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_metric_unit_height"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    </RadioGroup>
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_metric_unit_weight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/til_metric_unit_weight"
-        android:layout_margin="10dp"
-        app:boxStrokeColor="@color/purple_700"
-        app:hintTextColor="@color/purple_700">
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/rg_units"
+        android:hint="@string/bmi_et_hint_weight"
+        android:inputType="numberDecimal"
+        android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_metric_unit_height"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/bmi_et_hint_height"
-            android:inputType="numberDecimal"
-            android:textSize="16sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_metric_unit_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_metric_unit_weight"
+        android:hint="@string/bmi_et_hint_height"
+        android:inputType="numberDecimal"
+        android:textSize="16sp" />
+
 
     <LinearLayout
         android:id="@+id/ll_bmi_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/til_metric_unit_height"
+        android:layout_below="@id/et_metric_unit_height"
         android:layout_marginTop="25dp"
         android:orientation="vertical"
         android:visibility="invisible"
