@@ -27,4 +27,7 @@
     <string name="bmi_btn_calculate">Calculate</string>
     <string name="bmi_metrics_units">METRIC UNITS</string>
     <string name="bmi_us_units">US UNITS</string>
+    <string name="et_bmi_feet">Feet</string>
+    <string name="et_bmi_inch">Inch</string>
+    <string name="et_bmi_us_weight">Weight</string>
 </resources>
