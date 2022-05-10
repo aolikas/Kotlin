@@ -30,4 +30,5 @@
     <string name="et_bmi_feet">Feet</string>
     <string name="et_bmi_inch">Inch</string>
     <string name="et_bmi_us_weight">Weight</string>
+    <string name="main_history">History</string>
 </resources>
